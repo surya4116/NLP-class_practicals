@@ -1,0 +1,20 @@
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+ps = PorterStemmer()
+lem = WordNetLemmatizer()
+
+words = ["create", "creates", "creating"]
+
+rules = {
+    "create": ("-", "Base form"),
+    "creates": ("s", "Third-person singular"),
+    "creating": ("ing", "Present participle")
+}
+
+print("Word\t\tSuffix\tCategory\t\tStem\tNormalized")
+
+for word in words:
+    suffix, category = rules[word]
+    stem = ps.stem(word)
+    normalized = lem.lemmatize(word, pos="v")
+    print(f"{word}\t\t{suffix}\t{category}\t{stem}\t{normalized}")
