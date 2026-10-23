@@ -1,0 +1,45 @@
+import nltk
+from nltk.corpus import wordnet as wn
+
+nltk.download("wordnet")
+nltk.download("omw-1.4")
+
+irregular = {
+    "children": "child",
+    "men": "man",
+    "women": "woman",
+    "mice": "mouse",
+    "teeth": "tooth",
+    "feet": "foot",
+    "people": "person",
+    "geese": "goose"
+}
+
+def parser(word):
+    word = word.lower()
+
+    if word in irregular:
+        return irregular[word], "Irregular plural"
+
+    # Use WordNet to check whether a candidate is a noun lemma
+    candidate = wn.morphy(word, wn.NOUN)
+
+    if candidate and candidate != word:
+        return candidate, "Plural noun"
+
+    if word.endswith("ies") and len(word) > 3:
+        return word[:-3] + "y", "Plural noun (-ies)"
+
+    if word.endswith(("ches", "shes", "xes", "zes", "sses")):
+        return word[:-2], "Plural noun (-es)"
+
+    if word.endswith("s") and not word.endswith(("ss", "us", "is")):
+        return word[:-1], "Regular plural (-s)"
+
+    return word, "Singular or unrecognized"
+
+words = ["cars", "boxes", "cities", "children", "dogs",
+         "mice", "books", "watches", "car"]
+
+for word in words:
+    print(word, "->", parser(word))
