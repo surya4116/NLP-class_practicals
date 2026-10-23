@@ -1,0 +1,19 @@
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+ps = PorterStemmer()
+lem = WordNetLemmatizer()
+
+words = ["govern", "government", "governance"]
+
+rules = {
+    "govern": ("govern", "-", 0),
+    "government": ("govern", "ment", 1),
+    "governance": ("govern", "ance", 1)
+}
+
+print("Word\t\tRoot\t\tAffix\tLevel\tNormalized")
+
+for word in words:
+    root, affix, level = rules[word]
+    print(f"{word}\t\t{root}\t\t{affix}\t{level}\tgovern")
+    print("NLTK Stem:", ps.stem(word))
