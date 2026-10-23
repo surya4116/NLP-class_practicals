@@ -1,0 +1,39 @@
+import pandas as pd
+from nltk.stem import PorterStemmer
+from nltk.tokenize import RegexpTokenizer
+from datasets import load_dataset
+
+ps = PorterStemmer()
+tokenizer = RegexpTokenizer(r"\w+")
+
+# Fix: Load dataset from HF instead of expecting a local BBCNews.csv file
+dataset = load_dataset("SetFit/bbc-news", split="train")
+data = pd.DataFrame(dataset)
+data = data.rename(columns={"text": "Text"})
+
+data["Text"] = data["Text"].fillna("").astype(str)
+
+def stem_text(text):
+    words = tokenizer.tokenize(text.lower())
+    return " ".join(ps.stem(word) for word in words)
+
+data["Processed"] = data["Text"].apply(stem_text)
+
+print("Original text:")
+print(data["Text"].head())
+
+print("\nStemmed text:")
+print(data["Processed"].head())
+
+# Compare at least 20 words
+words = [
+    "organization", "organizer", "organizing", "organized",
+    "organization's", "running", "runner", "runs", "studies",
+    "studied", "studying", "better", "businesses", "computers",
+    "relational", "generously", "happiness", "connection",
+    "connected", "connectivity"
+]
+
+print("\nOriginal Word -> Porter Stem")
+for word in words:
+    print(word, "->", ps.stem(word))
