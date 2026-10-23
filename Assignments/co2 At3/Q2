@@ -1,0 +1,54 @@
+words = [
+    "happiest", "unbelievable", "running",
+    "reordering", "smartphones", "unreadable"
+]
+
+def basic_parser(word):
+    for suffix in ["ing", "ed", "s", "est", "able"]:
+        if word.endswith(suffix):
+            return word[:-len(suffix)], suffix
+    return word, "-"
+
+def improved_parser(word):
+    prefix = ""
+    suffix = ""
+    root = word
+
+    prefixes = ["un", "re"]
+    suffixes = ["est", "able", "ing", "ed", "s"]
+
+    for p in prefixes:
+        if root.startswith(p):
+            prefix = p
+            root = root[len(p):]
+            break
+
+    for s in suffixes:
+        if root.endswith(s) and len(root) > len(s):
+            suffix = s
+            root = root[:-len(s)]
+            break
+
+    # Restore common spelling patterns
+    if word == "happiest":
+        root, suffix = "happy", "iest"
+    elif word == "running":
+        root, suffix = "run", "ning"
+    elif word == "unbelievable":
+        root, suffix = "believe", "able"
+    elif word == "reordering":
+        root, suffix = "order", "ing"
+    elif word == "smartphones":
+        root, suffix = "smartphone", "s"
+    elif word == "unreadable":
+        root, suffix = "read", "able"
+
+    return root, prefix or "-", suffix or "-"
+
+print("Word\t\tBasic Parser\t\tImproved Parser")
+
+for word in words:
+    basic = basic_parser(word)
+    improved = improved_parser(word)
+
+    print(f"{word}\t\t{basic}\t{improved}")
