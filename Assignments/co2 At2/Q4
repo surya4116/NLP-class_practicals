@@ -1,0 +1,21 @@
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+ps = PorterStemmer()
+lem = WordNetLemmatizer()
+
+words = ["activate", "activation", "reactivation"]
+
+rules = {
+    "activate": ("-", "act", "ivate", "Verb", "Base verb"),
+    "activation": ("-", "act", "ivation", "Noun", "Verb to noun"),
+    "reactivation": ("re", "act", "ivation", "Noun",
+                     "Prefix re- indicates repetition")
+}
+
+print("Word\t\tPrefix\tRoot\tSuffix\t\tClass")
+
+for word in words:
+    prefix, root, suffix, word_class, meaning = rules[word]
+    print(f"{word}\t{prefix}\t{root}\t{suffix}\t{word_class}")
+    print("Derivation:", meaning)
+    print("NLTK Stem:", ps.stem(word))
