@@ -1,0 +1,19 @@
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+ps = PorterStemmer()
+lem = WordNetLemmatizer()
+
+words = ["analyzing", "analysis", "analytical"]
+
+print("Word\t\tRoot\t\tAffix\tType\t\tNormalized")
+
+for word in words:
+    if word == "analyzing":
+        root, affix, category, norm = "analyze", "ing", "Inflectional", "analyze"
+    elif word == "analysis":
+        root, affix, category, norm = "analysis", "-", "Derivational", "analyze"
+    else:
+        root, affix, category, norm = "analyt", "ical", "Derivational", "analyze"
+
+    print(f"{word}\t\t{root}\t\t{affix}\t{category}\t{norm}")
+    print("NLTK Stem:", ps.stem(word))
