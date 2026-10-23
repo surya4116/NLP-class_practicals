@@ -1,0 +1,25 @@
+
+import pandas as pd
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+
+ps = PorterStemmer()
+lem = WordNetLemmatizer()
+
+words = [
+    "infection", "infectious", "infected", "infect",
+    "infections", "infecting", "infectivity", "infective"
+]
+
+data = []
+
+for word in words:
+    data.append({
+        "Original Word": word,
+        "Porter Stem": ps.stem(word),
+        "Verb Lemma": lem.lemmatize(word, pos="v"),
+        "Noun Lemma": lem.lemmatize(word, pos="n")
+    })
+
+df = pd.DataFrame(data)
+print(df.to_string(index=False))
