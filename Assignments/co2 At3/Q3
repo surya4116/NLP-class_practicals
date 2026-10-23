@@ -1,0 +1,72 @@
+import pandas as pd
+import time
+
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.tokenize import RegexpTokenizer
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from datasets import load_dataset
+
+# Load the BBC News dataset from Hugging Face instead of a local CSV
+dataset = load_dataset("SetFit/bbc-news", split="train")
+df = pd.DataFrame(dataset)
+
+# Rename columns to match your original script ("text" -> "Text", "label_text" -> "Category")
+df = df.rename(columns={"text": "Text", "label_text": "Category"})
+df = df.dropna(subset=["Text", "Category"])
+
+tokenizer = RegexpTokenizer(r"\w+")
+stemmer = PorterStemmer()
+lemmatizer = WordNetLemmatizer()
+
+def tokenize(text):
+    return tokenizer.tokenize(str(text).lower())
+
+def stem_text(text):
+    return " ".join(stemmer.stem(w) for w in tokenize(text))
+
+def lemma_text(text):
+    return " ".join(lemmatizer.lemmatize(w) for w in tokenize(text))
+
+df["Original"] = df["Text"].astype(str)
+df["Stemmed"] = df["Text"].apply(stem_text)
+df["Lemmatized"] = df["Text"].apply(lemma_text)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    df["Category"], df["Category"],
+    test_size=0.2, random_state=42, stratify=df["Category"]
+) if False else (None, None, None, None)
+
+# Split text and labels together
+train_text, test_text, y_train, y_test = train_test_split(
+    df["Original"], df["Category"],
+    test_size=0.2, random_state=42, stratify=df["Category"]
+)
+
+for method in ["Original", "Stemmed", "Lemmatized"]:
+    train_indices = train_text.index
+    test_indices = test_text.index
+
+    vectorizer = TfidfVectorizer()
+    start = time.time()
+
+    X_train = vectorizer.fit_transform(df.loc[train_indices, method])
+    X_test = vectorizer.transform(df.loc[test_indices, method])
+
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+
+    elapsed = time.time() - start
+
+    print("\nMethod:", method)
+    print("Vocabulary size:", len(vectorizer.vocabulary_))
+    print("Accuracy:", round(accuracy_score(y_test, predictions), 4))
+    print("Processing time:", round(elapsed, 3), "seconds")
+
+print("\nExample stemming cases:")
+for word in ["organization", "organizer", "organizing",
+             "organized", "organization's"]:
+    print(word, "->", stemmer.stem(word))
