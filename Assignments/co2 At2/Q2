@@ -1,0 +1,23 @@
+
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+ps = PorterStemmer()
+lem = WordNetLemmatizer()
+
+words = ["disagree", "agreement", "agreeable"]
+
+rules = {
+    "disagree": ("dis", "agree", "-", "Derivational",
+                 "Opposite or contrary meaning"),
+    "agreement": ("-", "agree", "ment", "Derivational",
+                  "State or result of agreeing"),
+    "agreeable": ("-", "agree", "able", "Derivational",
+                  "Capable of being pleasing")
+}
+
+print("Word\t\tPrefix\tRoot\tSuffix\tType\t\tMeaning")
+
+for word in words:
+    prefix, root, suffix, category, meaning = rules[word]
+    print(f"{word}\t{prefix}\t{root}\t{suffix}\t{category}\t{meaning}")
+    print("NLTK Stem:", ps.stem(word))
