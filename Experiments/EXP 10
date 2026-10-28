@@ -1,8 +1,0 @@
-words = ["The", "boy", "plays", "cricket"]
-tags = ["NN", "NN", "NN", "NN"]
-# Transformation rule: words ending in 's' are tagged as VBZ
-for i in range(len(words)):
-    if words[i].endswith("s"):
-        tags[i] = "VBZ"
-for word, tag in zip(words, tags):
-    print(word, "->", tag)
