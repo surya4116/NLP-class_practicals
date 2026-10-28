@@ -1,0 +1,15 @@
+
+import nltk
+
+text = ["The", "boy", "plays", "quickly"]
+
+patterns = [
+    (r'.*ly$', 'RB'),
+    (r'.*ing$', 'VBG'),
+    (r'.*ed$', 'VBD'),
+    (r'.*', 'NN')
+]
+
+tagger = nltk.RegexpTagger(patterns)
+
+print(tagger.tag(text))
