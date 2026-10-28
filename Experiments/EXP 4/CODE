@@ -1,0 +1,11 @@
+
+def plural(word):
+    if word.endswith(("s", "sh", "ch", "x", "z")):
+        return word + "es"
+    else:
+        return word + "s"
+
+words = ["cat", "bus", "box", "book"]
+
+for word in words:
+    print(word, "->", plural(word))
