@@ -1,0 +1,8 @@
+
+import re
+
+text = "NLP is interesting. My number is 9876543210."
+
+print("Numbers:", re.findall(r'\d+', text))
+print("Words:", re.findall(r'[A-Za-z]+', text))
+print("Search:", re.search("NLP", text).group())
