@@ -1,0 +1,14 @@
+import random
+text = "i like NLP i like Python i love Python"
+words = text.split()
+bigrams = {}
+for i in range(len(words) - 1):
+    bigrams.setdefault(words[i], []).append(words[i + 1])
+word = "i"
+result = [word]
+for i in range(5):
+    if word not in bigrams:
+        break
+    word = random.choice(bigrams[word])
+    result.append(word)
+print("Generated Text:", " ".join(result))
