@@ -2,7 +2,6 @@
 import re
 text = "My phone number is 9876543210. My age is 20."
 result = re.search(r"\d{10}", text)
-
 if result:
     print("Phone number found:", result.group())
 else:
