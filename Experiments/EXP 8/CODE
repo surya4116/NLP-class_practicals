@@ -1,0 +1,15 @@
+
+import random
+
+tags = {
+    "The": ["DT"],
+    "boy": ["NN", "VB"],
+    "plays": ["VBZ", "NNS"],
+    "cricket": ["NN"]
+}
+
+words = ["The", "boy", "plays", "cricket"]
+
+for word in words:
+    tag = random.choice(tags[word])
+    print(word, "->", tag)
